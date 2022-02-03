@@ -37,8 +37,8 @@ public class PathFinding
         while (openList.Count > 0)
         {
             Cell currentCell = GetMinFCost(openList); // TODO : Min-heap
-            currentCell.isInPathFinding = true;
-            currentCell.gizmosColor = Color.yellow;
+
+            currentCell.type = CellType.CheckedPoint;
 
             if (currentCell == pathEndCell)
             {
@@ -60,7 +60,6 @@ public class PathFinding
                     neighborCell.gCost = tempGCost;
                     neighborCell.heuristicCost = CalcualteHCost(neighborCell, pathEndCell);
                     neighborCell.CalculateFCost();
-
                 }
 
                 if (!openList.Contains(neighborCell))
@@ -80,8 +79,7 @@ public class PathFinding
             path.Add(endCell.parentCell);
             endCell = endCell.parentCell;
 
-            endCell.isInPathFinding = true;
-            endCell.gizmosColor = Color.magenta;
+            endCell.type = CellType.FinalPathPoint;
         }
 
         path.Reverse();

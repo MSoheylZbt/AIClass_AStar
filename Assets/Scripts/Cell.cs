@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CellType
+{
+    Normal,
+    Blocked,
+    CheckedPoint,
+    FinalPathPoint,
+    EndPoint,
+    StartPoint
+}
 
 [RequireComponent(typeof(CircleCollider2D))]
 public class Cell : MonoBehaviour
@@ -25,9 +34,10 @@ public class Cell : MonoBehaviour
     #endregion
 
     #region Editor
-    public Color gizmosColor;
-    public bool isInPathFinding = false;
+    public CellType type = CellType.Normal;
     #endregion
+
+
     private void Update()
     {
         if (Input.GetKey(KeyCode.S))
@@ -49,10 +59,13 @@ public class Cell : MonoBehaviour
         GetComponent<CircleCollider2D>().radius = 0.1f;
 
         transform.position = pos;
+
         isBlock = isBlocked;
+        if (isBlock)
+            type = CellType.Blocked;
+
         this.gridX = gridX;
         this.gridY = gridY;
-
         cellData = data;
     }
 
@@ -69,6 +82,7 @@ public class Cell : MonoBehaviour
             print("End Cell is : " + this.gridX + " " + this.gridY);
             cellData.endCellX = gridX;
             cellData.endCellY = gridY;
+            type = CellType.EndPoint;
             return;
         }
 
@@ -77,24 +91,49 @@ public class Cell : MonoBehaviour
             print("Start Cell is : " + this.gridX + " " + this.gridY);
             cellData.startCellX = gridX;
             cellData.startCellY = gridY;
+            type = CellType.StartPoint;
             return;
         }
 
         print(gridX + " " + gridY);
         isBlock = !isBlock;
+        if (isBlock)
+            type = CellType.Blocked;
+        else
+            type = CellType.Normal;
+
         cellData.AddCell(gridX * 25 + gridY , isBlock);
     }
 
 
     private void OnDrawGizmos()
     {
-        if (isBlock)
-            Gizmos.color = Color.red;
-        else
-            Gizmos.color = Color.green;
+        switch(type)
+        {
+            case CellType.Blocked:
+                Gizmos.color = Color.red;
+                break;
 
-        if(isInPathFinding)
-            Gizmos.color = gizmosColor;
+            case CellType.CheckedPoint:
+                Gizmos.color = Color.yellow;
+                break;
+
+            case CellType.FinalPathPoint:
+                Gizmos.color = Color.magenta;
+                break;
+
+            case CellType.StartPoint:
+                Gizmos.color = Color.white;
+                break;
+
+            case CellType.EndPoint:
+                Gizmos.color = Color.black;
+                break;
+
+            default:
+                Gizmos.color = Color.green;
+                break;
+        }
 
         Gizmos.DrawWireSphere(transform.position, 0.1f);
     }

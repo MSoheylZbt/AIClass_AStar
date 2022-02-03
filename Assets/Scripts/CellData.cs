@@ -8,6 +8,7 @@ public class CellData : ScriptableObject
 {
     [SerializeField] List<bool> cellBools = new List<bool>();
     [SerializeField] List<int> cellBoolIndexes = new List<int>();
+
     public int startCellX,startCellY;
     public int endCellX,endCellY;
 
