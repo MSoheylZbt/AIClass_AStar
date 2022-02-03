@@ -129,7 +129,7 @@ public class PathFinding
         int parentY = parentCell.gridY;
 
         //Right Child
-        if(parentY + 1 < 24 )
+        if(parentY + 1 < 25 )
             childs.Add(grid.GetCellObject(parentX, parentY+1));
 
         //Left Child
@@ -137,7 +137,7 @@ public class PathFinding
             childs.Add(grid.GetCellObject(parentX, parentY - 1));
 
         //Up Child
-        if(parentX + 1 < 24)
+        if(parentX + 1 < 25)
             childs.Add(grid.GetCellObject(parentX + 1, parentY));
 
         //Down Child
