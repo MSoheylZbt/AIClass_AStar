@@ -2,14 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MinHeap : MonoBehaviour
+public class MinHeap
 {
     private readonly int[] _elements;
     private int _size;
 
+    public List<Cell> cells;
+
     public MinHeap(int size)
     {
         _elements = new int[size];
+    }
+
+    public MinHeap(List<Cell> cellsToSet)
+    {
+        cells = cellsToSet;
+        _elements = GetListFCosts(cells);
+        HeapifyUp();
     }
 
     private int GetLeftChildIndex(int elementIndex) => 2 * elementIndex + 1;
@@ -27,9 +36,24 @@ public class MinHeap : MonoBehaviour
     private void Swap(int firstIndex, int secondIndex)
     {
         var temp = _elements[firstIndex];
-        _elements[firstIndex] = _elements[secondIndex];
-        _elements[secondIndex] = temp;
+        if(cells.Count <= 0)
+        {
+            _elements[firstIndex] = _elements[secondIndex];
+            _elements[secondIndex] = temp;
+        }
+        else
+        {
+            Cell tempCell = cells[firstIndex];
+
+            _elements[firstIndex] = _elements[secondIndex];
+            cells[firstIndex] = cells[secondIndex];
+
+            _elements[secondIndex] = temp;
+            cells[secondIndex] = tempCell;
+        }
+
     }
+
 
     public bool IsEmpty()
     {
@@ -39,7 +63,7 @@ public class MinHeap : MonoBehaviour
     public int Peek()
     {
         if (_size == 0)
-            print("index out of range");
+            Debug.Log("index out of range");
 
         return _elements[0];
     }
@@ -47,7 +71,7 @@ public class MinHeap : MonoBehaviour
     public int Pop()
     {
         if (_size == 0)
-            print("index out of range");
+            Debug.Log("index out of range");
 
         var result = _elements[0];
         _elements[0] = _elements[_size - 1];
@@ -61,7 +85,7 @@ public class MinHeap : MonoBehaviour
     public void Add(int element)
     {
         if (_size == _elements.Length)
-            print("index out of range");
+            Debug.Log("index out of range");
 
         _elements[_size] = element;
         _size++;
@@ -99,5 +123,15 @@ public class MinHeap : MonoBehaviour
             Swap(parentIndex, index);
             index = parentIndex;
         }
+    }
+
+    private int[] GetListFCosts(List<Cell> cells)
+    {
+        int[] result = new int[cells.Count];
+        for (int i = 0; i < cells.Count; i++)
+        {
+            result[i] = cells[i].fCost;
+        }
+        return result;
     }
 }
