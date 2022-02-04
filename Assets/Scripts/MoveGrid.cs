@@ -1,17 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class MoveGrid : MonoBehaviour
 {
     Cell[,] grid = new Cell[25,25];
     [SerializeField] Cell cellPref;
-    [SerializeField] CellData cellData;
+    public CellData cellData;
 
     private void Awake()
     {
         CreateGrid();
+
+        //Read Cell data from file
+        string jsonFile = File.ReadAllText(Application.dataPath + "/saveFile.json");
+        cellData = JsonUtility.FromJson<CellData>(jsonFile);
     }
 
     private void CreateGrid()

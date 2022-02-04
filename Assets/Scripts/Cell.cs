@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public enum CellType
@@ -104,6 +105,7 @@ public class Cell : MonoBehaviour
         }
 
         print(gridX + " " + gridY);
+
         isBlock = !isBlock;
         if (isBlock)
             type = CellType.Blocked;
@@ -111,6 +113,12 @@ public class Cell : MonoBehaviour
             type = CellType.Normal;
 
         cellData.AddCell(gridX * 25 + gridY , isBlock);
+
+
+        //Update Json File
+        string jsonFile = JsonUtility.ToJson(cellData);
+        Debug.Log(jsonFile);
+        File.WriteAllText(Application.dataPath + "/saveFile.json", jsonFile);
     }
 
 

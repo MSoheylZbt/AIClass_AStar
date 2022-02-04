@@ -5,7 +5,6 @@ using UnityEngine;
 public class TestPathFinding : MonoBehaviour
 {
     [SerializeField] MoveGrid grid;
-    [SerializeField] CellData cellData;
 
     PathFinding pathFinding = new PathFinding();
     List<Cell> cells;
@@ -25,7 +24,7 @@ public class TestPathFinding : MonoBehaviour
             if(!isTimerStarted)
                 StartCoroutine(Timer());
 
-            cells = pathFinding.GetPath(cellData.startCellX, cellData.startCellY, cellData.endCellX, cellData.endCellY);
+            cells = pathFinding.GetPath();
         }
     }
 

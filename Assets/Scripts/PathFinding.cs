@@ -16,10 +16,11 @@ public class PathFinding
         grid = gridToSet;
     }
 
-    public List<Cell> GetPath(int startX, int startY, int endX, int endY)
+    public List<Cell> GetPath()
     {
-        Cell pathStartCell = grid.GetCellObjectByXY(startX, startY);
-        Cell pathEndCell = grid.GetCellObjectByXY(endX, endY);
+        CellData cellData = grid.cellData;
+        Cell pathStartCell = grid.GetCellObjectByXY(cellData.startCellX, cellData.startCellY);
+        Cell pathEndCell = grid.GetCellObjectByXY(cellData.endCellX,cellData.endCellY);
 
 
 

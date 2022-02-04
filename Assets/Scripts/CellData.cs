@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Cell Data")]
-public class CellData : ScriptableObject
+public class CellData 
 {
-    [SerializeField] List<bool> cellBools = new List<bool>();
-    [SerializeField] List<int> cellBoolIndexes = new List<int>();
+    List<bool> cellBools = new List<bool>();
+    List<int> cellBoolIndexes = new List<int>();
 
     public int startCellX,startCellY;
     public int endCellX,endCellY;
