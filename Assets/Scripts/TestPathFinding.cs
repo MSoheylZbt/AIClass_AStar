@@ -6,7 +6,12 @@ public class TestPathFinding : MonoBehaviour
 {
     [SerializeField] MoveGrid grid;
     [SerializeField] CellData cellData;
+
     PathFinding pathFinding = new PathFinding();
+    List<Cell> cells;
+
+    float elapsedTime = 0;
+    bool isTimerStarted = false;
 
     private void Start()
     {
@@ -17,7 +22,24 @@ public class TestPathFinding : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.P))
         {
-            pathFinding.GetPath(cellData.startCellX, cellData.startCellY, cellData.endCellX, cellData.endCellY);
+            if(!isTimerStarted)
+                StartCoroutine(Timer());
+
+            cells = pathFinding.GetPath(cellData.startCellX, cellData.startCellY, cellData.endCellX, cellData.endCellY);
         }
+    }
+
+    IEnumerator Timer()
+    {
+        isTimerStarted = true;
+        while(cells == null)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        print( "elapsedTime: " + elapsedTime);
+        print( "Number of Counted nodes: " + pathFinding.checkedNodeCounter);
+        isTimerStarted = false;
     }
 }

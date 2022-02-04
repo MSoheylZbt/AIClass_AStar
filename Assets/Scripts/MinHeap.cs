@@ -4,29 +4,21 @@ using UnityEngine;
 
 public class MinHeap
 {
-    private readonly int[] _elements;
-    private int _size;
+    private List<int> _elements;
+    private MoveGrid grid;
 
-    public List<Cell> cells;
-
-    public MinHeap(int size)
+    public MinHeap(MoveGrid gridToSet)
     {
-        _elements = new int[size];
-    }
-
-    public MinHeap(List<Cell> cellsToSet)
-    {
-        cells = cellsToSet;
-        _elements = GetListFCosts(cells);
-        HeapifyUp();
+        _elements = new List<int>();
+        grid = gridToSet; 
     }
 
     private int GetLeftChildIndex(int elementIndex) => 2 * elementIndex + 1;
     private int GetRightChildIndex(int elementIndex) => 2 * elementIndex + 2;
     private int GetParentIndex(int elementIndex) => (elementIndex - 1) / 2;
 
-    private bool HasLeftChild(int elementIndex) => GetLeftChildIndex(elementIndex) < _size;
-    private bool HasRightChild(int elementIndex) => GetRightChildIndex(elementIndex) < _size;
+    private bool HasLeftChild(int elementIndex) => GetLeftChildIndex(elementIndex) < _elements.Count;
+    private bool HasRightChild(int elementIndex) => GetRightChildIndex(elementIndex) < _elements.Count;
     private bool IsRoot(int elementIndex) => elementIndex == 0;
 
     private int GetLeftChild(int elementIndex) => _elements[GetLeftChildIndex(elementIndex)];
@@ -36,33 +28,19 @@ public class MinHeap
     private void Swap(int firstIndex, int secondIndex)
     {
         var temp = _elements[firstIndex];
-        if(cells.Count <= 0)
-        {
-            _elements[firstIndex] = _elements[secondIndex];
-            _elements[secondIndex] = temp;
-        }
-        else
-        {
-            Cell tempCell = cells[firstIndex];
-
-            _elements[firstIndex] = _elements[secondIndex];
-            cells[firstIndex] = cells[secondIndex];
-
-            _elements[secondIndex] = temp;
-            cells[secondIndex] = tempCell;
-        }
-
+        _elements[firstIndex] = _elements[secondIndex];
+        _elements[secondIndex] = temp;
     }
 
 
     public bool IsEmpty()
     {
-        return _size == 0;
+        return _elements.Count == 0;
     }
 
     public int Peek()
     {
-        if (_size == 0)
+        if (_elements.Count == 0)
             Debug.Log("index out of range");
 
         return _elements[0];
@@ -70,25 +48,23 @@ public class MinHeap
 
     public int Pop()
     {
-        if (_size == 0)
+        if (_elements.Count == 0)
+        {
             Debug.Log("index out of range");
+        } 
 
         var result = _elements[0];
-        _elements[0] = _elements[_size - 1];
-        _size--;
+        _elements[0] = _elements[_elements.Count - 1];
+        _elements.RemoveAt(_elements.Count - 1);
 
         HeapifyDown();
-
         return result;
     }
 
     public void Add(int element)
     {
-        if (_size == _elements.Length)
-            Debug.Log("index out of range");
-
-        _elements[_size] = element;
-        _size++;
+        List<int> temp = new List<int> { element };
+        _elements.AddRange(temp);
 
         HeapifyUp();
     }
@@ -99,12 +75,12 @@ public class MinHeap
         while (HasLeftChild(index))
         {
             var smallerIndex = GetLeftChildIndex(index);
-            if (HasRightChild(index) && GetRightChild(index) < GetLeftChild(index))
+            if (HasRightChild(index) && grid.GetCellObjectByIndex(GetRightChild(index)).fCost < grid.GetCellObjectByIndex(GetLeftChild(index)).fCost)
             {
                 smallerIndex = GetRightChildIndex(index);
             }
 
-            if (_elements[smallerIndex] >= _elements[index])
+            if (grid.GetCellObjectByIndex(_elements[smallerIndex]).fCost >= grid.GetCellObjectByIndex(_elements[index]).fCost)
             {
                 break;
             }
@@ -116,22 +92,12 @@ public class MinHeap
 
     private void HeapifyUp()
     {
-        var index = _size - 1;
-        while (!IsRoot(index) && _elements[index] < GetParent(index))
+        var index = _elements.Count - 1;
+        while (!IsRoot(index) && grid.GetCellObjectByIndex(_elements[index]).fCost < grid.GetCellObjectByIndex(GetParent(index)).fCost)
         {
             var parentIndex = GetParentIndex(index);
             Swap(parentIndex, index);
             index = parentIndex;
         }
-    }
-
-    private int[] GetListFCosts(List<Cell> cells)
-    {
-        int[] result = new int[cells.Count];
-        for (int i = 0; i < cells.Count; i++)
-        {
-            result[i] = cells[i].fCost;
-        }
-        return result;
     }
 }

@@ -42,9 +42,16 @@ public class MoveGrid : MonoBehaviour
     }
 
 
-    public Cell GetCellObject(int gridY, int gridX)
+    public Cell GetCellObjectByXY(int gridY, int gridX)
     {
         return grid[gridX, gridY];
+    }
+
+    public Cell GetCellObjectByIndex(int index)
+    {
+        int y = index / 25;
+        int x = index % 25;
+        return grid[x, y];
     }
 
 }

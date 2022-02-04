@@ -18,6 +18,14 @@ public class Cell : MonoBehaviour
     #region Utilities
     CellData cellData;
     public int gridX, gridY;
+
+    public int index
+    {
+        get
+        {
+            return (gridX * 25 + gridY);
+        }
+    }
     #endregion
 
     #region for Pathfinding

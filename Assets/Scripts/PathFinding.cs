@@ -9,6 +9,8 @@ public class PathFinding
     List<Cell> openList;
     List<Cell> closedList;
 
+    public int checkedNodeCounter = 0;
+
     public void Init(MoveGrid gridToSet)
     {
         grid = gridToSet;
@@ -16,8 +18,10 @@ public class PathFinding
 
     public List<Cell> GetPath(int startX, int startY, int endX, int endY)
     {
-        Cell pathStartCell = grid.GetCellObject(startX, startY);
-        Cell pathEndCell = grid.GetCellObject(endX, endY);
+        Cell pathStartCell = grid.GetCellObjectByXY(startX, startY);
+        Cell pathEndCell = grid.GetCellObjectByXY(endX, endY);
+
+
 
         if (pathEndCell == pathStartCell)
         {
@@ -34,9 +38,16 @@ public class PathFinding
         pathStartCell.heuristicCost = CalcualteHCost(pathStartCell, pathEndCell);
         pathStartCell.CalculateFCost();
 
+        MinHeap fCostHeap = new MinHeap(grid);
+        fCostHeap.Add(pathStartCell.index);
+
         while (openList.Count > 0)
         {
-            Cell currentCell = GetMinFCost(openList); // TODO : Min-heap
+            checkedNodeCounter++;
+            Cell currentCell;
+
+            currentCell = grid.GetCellObjectByIndex(fCostHeap.Pop());
+            //currentCell = GetMinFCost(openList);
 
             currentCell.type = CellType.CheckedPoint;
 
@@ -53,6 +64,7 @@ public class PathFinding
                 if (closedList.Contains(neighborCell) || neighborCell.isBlock)
                     continue;
 
+
                 int tempGCost = CalcualteHCost(currentCell, neighborCell) + currentCell.gCost; // gCost of current node = distance between currentnode and it's parent + distance from root to parent.
                 if (tempGCost < neighborCell.gCost) // instead of fCost we just compare gCost
                 {
@@ -63,8 +75,12 @@ public class PathFinding
                 }
 
                 if (!openList.Contains(neighborCell))
+                {
                     openList.Add(neighborCell);
+                    fCostHeap.Add(neighborCell.index);
+                }
             }
+
         }
 
         return null;
@@ -107,7 +123,7 @@ public class PathFinding
         {
             for(int j = 0; j < 25; j++)
             {
-                Cell tempCell = grid.GetCellObject(i, j);
+                Cell tempCell = grid.GetCellObjectByXY(i, j);
                 tempCell.gCost = int.MaxValue;
                 tempCell.CalculateFCost();
                 tempCell.parentCell = null;
@@ -130,19 +146,19 @@ public class PathFinding
 
         //Right Child
         if(parentY + 1 < 25 )
-            childs.Add(grid.GetCellObject(parentX, parentY+1));
+            childs.Add(grid.GetCellObjectByXY(parentX, parentY+1));
 
         //Left Child
         if(parentY - 1 >= 0)
-            childs.Add(grid.GetCellObject(parentX, parentY - 1));
+            childs.Add(grid.GetCellObjectByXY(parentX, parentY - 1));
 
         //Up Child
         if(parentX + 1 < 25)
-            childs.Add(grid.GetCellObject(parentX + 1, parentY));
+            childs.Add(grid.GetCellObjectByXY(parentX + 1, parentY));
 
         //Down Child
         if(parentX - 1 >= 0)
-            childs.Add(grid.GetCellObject(parentX - 1, parentY));
+            childs.Add(grid.GetCellObjectByXY(parentX - 1, parentY));
 
         return childs;
     }
