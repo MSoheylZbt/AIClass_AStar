@@ -40,6 +40,7 @@ public class Cell : MonoBehaviour
     #region Cache
     bool isSkeyHold = false;
     bool isEkeyHold = false;
+    SpriteRenderer spriteRender;
     #endregion
 
     #region Editor
@@ -66,12 +67,16 @@ public class Cell : MonoBehaviour
     public void Init(bool isBlocked,int gridX , int gridY,Vector2 pos,CellData data)
     {
         GetComponent<CircleCollider2D>().radius = 0.1f;
+        spriteRender = GetComponent<SpriteRenderer>();
 
         transform.position = pos;
 
         isBlock = isBlocked;
         if (isBlock)
+        {
             type = CellType.Blocked;
+            SetSpriteColor();
+        }
 
         this.gridX = gridX;
         this.gridY = gridY;
@@ -92,6 +97,7 @@ public class Cell : MonoBehaviour
             cellData.endCellX = gridX;
             cellData.endCellY = gridY;
             type = CellType.EndPoint;
+            SetSpriteColor();
             return;
         }
 
@@ -101,6 +107,7 @@ public class Cell : MonoBehaviour
             cellData.startCellX = gridX;
             cellData.startCellY = gridY;
             type = CellType.StartPoint;
+            SetSpriteColor();
             return;
         }
 
@@ -108,9 +115,15 @@ public class Cell : MonoBehaviour
 
         isBlock = !isBlock;
         if (isBlock)
+        {
             type = CellType.Blocked;
+            SetSpriteColor();
+        }
         else
+        {
             type = CellType.Normal;
+            SetSpriteColor();
+        }
 
         cellData.AddCell(gridX * 25 + gridY , isBlock);
 
@@ -121,35 +134,33 @@ public class Cell : MonoBehaviour
     }
 
 
-    private void OnDrawGizmos()
+    public void SetSpriteColor()
     {
-        switch(type)
+        switch (type)
         {
             case CellType.Blocked:
-                Gizmos.color = Color.red;
+                spriteRender.color = Color.black;
                 break;
 
             case CellType.CheckedPoint:
-                Gizmos.color = Color.yellow;
+                spriteRender.color = Color.yellow;
                 break;
 
             case CellType.FinalPathPoint:
-                Gizmos.color = Color.magenta;
+                spriteRender.color = Color.magenta;
                 break;
 
             case CellType.StartPoint:
-                Gizmos.color = Color.white;
+                spriteRender.color = Color.green;
                 break;
 
             case CellType.EndPoint:
-                Gizmos.color = Color.black;
+                spriteRender.color = Color.red;
                 break;
 
             default:
-                Gizmos.color = Color.green;
+                spriteRender.color = Color.white;
                 break;
         }
-
-        Gizmos.DrawWireSphere(transform.position, 0.1f);
     }
 }

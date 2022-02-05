@@ -27,6 +27,8 @@ public class TestPathFinding : MonoBehaviour
                 StartCoroutine(Timer());
 
             cells = pathFinding.GetPath();
+            if (cells == null)
+                UIText.text = "There is No Path!";
         }
     }
 

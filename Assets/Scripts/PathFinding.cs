@@ -49,6 +49,7 @@ public class PathFinding
             //currentCell = GetMinFCost(openList);
 
             currentCell.type = CellType.CheckedPoint;
+            currentCell.SetSpriteColor();
 
             if (currentCell == pathEndCell)
             {
@@ -95,6 +96,7 @@ public class PathFinding
             endCell = endCell.parentCell;
 
             endCell.type = CellType.FinalPathPoint;
+            endCell.SetSpriteColor();
         }
 
         path.Reverse();
