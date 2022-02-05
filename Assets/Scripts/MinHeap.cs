@@ -5,7 +5,8 @@ using UnityEngine;
 public class MinHeap
 {
     private List<int> _elements;
-    private MoveGrid grid;
+
+    private MoveGrid grid; //MinHeap should has acceess to grid because it us returning a list of int but we need Cells in A* algorithm.
 
     public MinHeap(MoveGrid gridToSet)
     {
@@ -55,7 +56,7 @@ public class MinHeap
         _elements[0] = _elements[_elements.Count - 1];
         _elements.RemoveAt(_elements.Count - 1);
 
-        HeapifyDown();
+        HeapifyDown();//Because we remove from start of tree.
         return result;
     }
 
@@ -64,15 +65,20 @@ public class MinHeap
         List<int> temp = new List<int> { element };
         _elements.AddRange(temp);
 
-        HeapifyUp();
+        HeapifyUp(); // Because we add to the end of tree.
     }
 
+    /// <summary>
+    /// Start from first node and with comparison to child nodes swap them if they are less.
+    /// </summary>
     private void HeapifyDown()
     {
         int index = 0;
-        while (HasLeftChild(index))
+        while (HasLeftChild(index)) // if there is no left child then there will be no right child too.
         {
             var smallerIndex = GetLeftChildIndex(index);
+
+            //In _elements index of cells will be stored and with indexes, we compare their fCost using grid reference.
             if (HasRightChild(index) && grid.GetCellObjectByIndex(GetRightChild(index)).fCost < grid.GetCellObjectByIndex(GetLeftChild(index)).fCost)
             {
                 smallerIndex = GetRightChildIndex(index);
@@ -88,10 +94,13 @@ public class MinHeap
         }
     }
 
+    /// <summary>
+    /// Start from last node and with comparison to parent node will heapify the node.
+    /// </summary>
     private void HeapifyUp()
     {
         var index = _elements.Count - 1;
-        while (!IsRoot(index) && grid.GetCellObjectByIndex(_elements[index]).fCost < grid.GetCellObjectByIndex(GetParent(index)).fCost)
+        while (!IsRoot(index) && grid.GetCellObjectByIndex(_elements[index]).fCost < grid.GetCellObjectByIndex(GetParent(index)).fCost) // Same as HeapifyDown
         {
             var parentIndex = GetParentIndex(index);
             Swap(parentIndex, index);

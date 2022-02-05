@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public enum CellType
+public enum CellType // For Drawing Cell in scene with different color, we need to define different types for cells.
 {
     Normal,
     Blocked,
@@ -13,14 +13,14 @@ public enum CellType
     StartPoint
 }
 
-[RequireComponent(typeof(CircleCollider2D))]
+[RequireComponent(typeof(CircleCollider2D))] // This attribute will add a CircleCollider2D in a GameObject that it added. we need CircleCollider2D for Clicking function.
 public class Cell : MonoBehaviour
 {
     #region Utilities
-    CellData cellData;
-    public int gridX, gridY;
+    GridData gridData;
+    public int gridX, gridY;//This cell X and Y in grid.
 
-    public int index
+    public int index // this Cell Grid index
     {
         get
         {
@@ -30,17 +30,17 @@ public class Cell : MonoBehaviour
     #endregion
 
     #region for Pathfinding
-    public bool isBlock;
-    public int gCost;
-    public int heuristicCost;
-    public int fCost;
-    public Cell parentCell;
+    public bool isBlock; // is this cell block?
+    public int gCost; //Distance between start cell and this cell.
+    public int heuristicCost; // Distance between this cell and Target cell.
+    public int fCost; // Sum of gCost and heuristicCost
+    public Cell parentCell; // reference to parent cell
     #endregion
 
     #region Cache
     bool isSkeyHold = false;
     bool isEkeyHold = false;
-    SpriteRenderer spriteRender;
+    SpriteRenderer spriteRender;//Reference to this Cell sprite.
     #endregion
 
     #region Editor
@@ -48,12 +48,12 @@ public class Cell : MonoBehaviour
     #endregion
 
 
-    private void Update()
+    private void Update() // Update Method run at start of each frame.
     {
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S)) // Check for holding S Key on Keyboard
             isSkeyHold = true;
 
-        if (Input.GetKeyUp(KeyCode.S))
+        if (Input.GetKeyUp(KeyCode.S)) // Check for Releasing S Key on Keyboard
             isSkeyHold = false;
 
         if (Input.GetKey(KeyCode.E))
@@ -63,16 +63,24 @@ public class Cell : MonoBehaviour
             isEkeyHold = false;
     }
 
-
-    public void Init(bool isBlocked,int gridX , int gridY,Vector2 pos,CellData data)
+    /// <summary>
+    /// This Method acts as an Constructor.
+    /// </summary>
+    /// <param name="isBlocked"></param>
+    /// <param name="gridX"></param>
+    /// <param name="gridY"></param>
+    /// <param name="pos"></param>
+    /// <param name="data"></param>
+    public void Init(bool isBlocked,int gridX , int gridY,Vector2 pos,GridData data) 
     {
-        GetComponent<CircleCollider2D>().radius = 0.1f;
-        spriteRender = GetComponent<SpriteRenderer>();
+        GetComponent<CircleCollider2D>().radius = 0.1f;//Set Radius of area that players can click.
+        spriteRender = GetComponent<SpriteRenderer>(); // Set Reference to image of this cell.
 
-        transform.position = pos;
+        transform.position = pos; // set this cell position.
 
         isBlock = isBlocked;
-        if (isBlock)
+
+        if (isBlock) // set this cell color
         {
             type = CellType.Blocked;
             SetSpriteColor();
@@ -80,7 +88,7 @@ public class Cell : MonoBehaviour
 
         this.gridX = gridX;
         this.gridY = gridY;
-        cellData = data;
+        gridData = data;
     }
 
     public void CalculateFCost()
@@ -89,31 +97,29 @@ public class Cell : MonoBehaviour
     }
 
 
-    private void OnMouseDown()
+    private void OnMouseDown() // This function will run whenever player clicked on this cell
     {
-        if(isEkeyHold)
+        if(isEkeyHold) // if E key is holding, then set this cell to End point of path in grid data.
         {
             //print("End Cell is : " + this.gridX + " " + this.gridY);
-            cellData.endCellX = gridX;
-            cellData.endCellY = gridY;
+            gridData.endCellX = gridX;
+            gridData.endCellY = gridY;
             type = CellType.EndPoint;
             SetSpriteColor();
             return;
         }
 
-        if(isSkeyHold)
+        if(isSkeyHold) // if S key is holding, then set this cell to Start point of path in grid data.
         {
             //print("Start Cell is : " + this.gridX + " " + this.gridY);
-            cellData.startCellX = gridX;
-            cellData.startCellY = gridY;
+            gridData.startCellX = gridX;
+            gridData.startCellY = gridY;
             type = CellType.StartPoint;
             SetSpriteColor();
             return;
         }
 
-        //print(gridX + " " + gridY);
-
-        isBlock = !isBlock;
+        isBlock = !isBlock; // Each time player clicks on a cell, it will toggle it's Blcoking situation.
         if (isBlock)
         {
             type = CellType.Blocked;
@@ -125,15 +131,17 @@ public class Cell : MonoBehaviour
             SetSpriteColor();
         }
 
-        cellData.AddCell(gridX * 25 + gridY , isBlock);
+        gridData.UpdateGrid(gridX * 25 + gridY , isBlock); // Add this cell to grid data.
 
 
-        //Update Json File
-        string jsonFile = JsonUtility.ToJson(cellData);
+        //Update Json File for saving this grid.
+        string jsonFile = JsonUtility.ToJson(gridData);
         File.WriteAllText(Application.dataPath + "/saveFile.json", jsonFile);
     }
 
-
+    /// <summary>
+    /// Set Image of Cell based on it's type
+    /// </summary>
     public void SetSpriteColor()
     {
         switch (type)
