@@ -23,10 +23,8 @@ public class PathFinding
         Cell pathEndCell = grid.GetCellObjectByXY(cellData.endCellX,cellData.endCellY);
 
 
-
         if (pathEndCell == pathStartCell)
         {
-            Debug.Log("<color=red> Start and End Should be different. </color>");
             return null;
         }
 

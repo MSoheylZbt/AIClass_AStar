@@ -12,11 +12,21 @@ public class MoveGrid : MonoBehaviour
 
     private void Awake()
     {
+        //Read Cell data from file
+        if (File.Exists(Application.dataPath + "/saveFile.json"))
+        {
+            string jsonFile = File.ReadAllText(Application.dataPath + "/saveFile.json");
+            cellData = JsonUtility.FromJson<CellData>(jsonFile);
+        }
+        else
+        {
+            cellData = new CellData();
+            string jsonData = JsonUtility.ToJson(cellData);
+            File.WriteAllText(Application.dataPath + "/saveFile.json",jsonData);
+        }
+
         CreateGrid();
 
-        //Read Cell data from file
-        string jsonFile = File.ReadAllText(Application.dataPath + "/saveFile.json");
-        cellData = JsonUtility.FromJson<CellData>(jsonFile);
     }
 
     private void CreateGrid()

@@ -49,9 +49,7 @@ public class MinHeap
     public int Pop()
     {
         if (_elements.Count == 0)
-        {
             Debug.Log("index out of range");
-        } 
 
         var result = _elements[0];
         _elements[0] = _elements[_elements.Count - 1];

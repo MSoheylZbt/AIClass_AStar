@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class TestPathFinding : MonoBehaviour
 {
     [SerializeField] MoveGrid grid;
+    [SerializeField] TextMeshProUGUI UIText;
 
     PathFinding pathFinding = new PathFinding();
     List<Cell> cells;
@@ -37,8 +39,7 @@ public class TestPathFinding : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        print( "elapsedTime: " + elapsedTime);
-        print( "Number of Counted nodes: " + pathFinding.checkedNodeCounter);
+        UIText.text = "Elapsed Time: " + elapsedTime + " \nNumber of Expanded nodes: " + pathFinding.checkedNodeCounter;
         isTimerStarted = false;
     }
 }

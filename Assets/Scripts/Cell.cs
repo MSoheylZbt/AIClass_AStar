@@ -88,7 +88,7 @@ public class Cell : MonoBehaviour
     {
         if(isEkeyHold)
         {
-            print("End Cell is : " + this.gridX + " " + this.gridY);
+            //print("End Cell is : " + this.gridX + " " + this.gridY);
             cellData.endCellX = gridX;
             cellData.endCellY = gridY;
             type = CellType.EndPoint;
@@ -97,14 +97,14 @@ public class Cell : MonoBehaviour
 
         if(isSkeyHold)
         {
-            print("Start Cell is : " + this.gridX + " " + this.gridY);
+            //print("Start Cell is : " + this.gridX + " " + this.gridY);
             cellData.startCellX = gridX;
             cellData.startCellY = gridY;
             type = CellType.StartPoint;
             return;
         }
 
-        print(gridX + " " + gridY);
+        //print(gridX + " " + gridY);
 
         isBlock = !isBlock;
         if (isBlock)
@@ -117,7 +117,6 @@ public class Cell : MonoBehaviour
 
         //Update Json File
         string jsonFile = JsonUtility.ToJson(cellData);
-        Debug.Log(jsonFile);
         File.WriteAllText(Application.dataPath + "/saveFile.json", jsonFile);
     }
 

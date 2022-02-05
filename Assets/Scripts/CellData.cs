@@ -5,12 +5,23 @@ using UnityEngine;
 
 public class CellData 
 {
-    List<bool> cellBools = new List<bool>();
-    List<int> cellBoolIndexes = new List<int>();
+    public List<bool> cellBools;
+    public List<int> cellBoolIndexes;
 
     public int startCellX,startCellY;
     public int endCellX,endCellY;
 
+
+    public CellData()
+    {
+        cellBools = new List<bool>();
+        cellBoolIndexes = new List<int>();
+
+        startCellX = 0;
+        startCellY = 0;
+        endCellX = 24;
+        endCellY = 24;
+    }
 
     public void AddCell(int key,bool value)
     {
