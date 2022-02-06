@@ -14,16 +14,14 @@ public class TestPathFinding : MonoBehaviour
     float elapsedTime = 0; // Elapsed time for calculating algorithm run time
     bool isTimerStarted = false; // for not runnig a previously runned coroutine again.
 
-    private void Start() // This function will run after Awake() and at start of game.
-    {
-        pathFinding = new PathFinding(grid);
-    }
 
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.P))
         {
-            if(!isTimerStarted)
+            pathFinding = new PathFinding(grid);
+
+            if (!isTimerStarted)
                 StartCoroutine(Timer());
 
             cells = pathFinding.GetPath();
@@ -45,6 +43,7 @@ public class TestPathFinding : MonoBehaviour
             yield return new WaitForEndOfFrame(); // Wait a frame and then go for next cycle.
         }
 
+        UIText.gameObject.SetActive(true);
         UIText.text = "Elapsed Time: " + elapsedTime + " \nNumber of Expanded nodes: " + pathFinding.checkedNodeCounter;
         isTimerStarted = false;
     }

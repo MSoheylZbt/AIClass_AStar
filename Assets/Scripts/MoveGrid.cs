@@ -12,7 +12,7 @@ public class MoveGrid : MonoBehaviour //inherited from MonoBehaviour. This will 
 
     public GridData gridData;
 
-    private void Awake() // This Function will run at the very start of the game (before rendering.)
+    private void Start() // This Function will run at Start of the game.
     {
         //Read Grid data from file
         if (File.Exists(Application.dataPath + "/saveFile.json"))
