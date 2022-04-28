@@ -61,6 +61,7 @@ public class Cell : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.E))
             isEkeyHold = false;
+
     }
 
     /// <summary>
@@ -71,7 +72,7 @@ public class Cell : MonoBehaviour
     /// <param name="gridY"></param>
     /// <param name="pos"></param>
     /// <param name="data"></param>
-    public void Init(bool isBlocked,int gridX , int gridY,Vector2 pos,GridData data) 
+    public void Init(bool isBlocked,int gridX, int gridY,Vector2 pos,GridData data) 
     {
         GetComponent<CircleCollider2D>().radius = 0.1f;//Set Radius of area that players can click.
         spriteRender = GetComponent<SpriteRenderer>(); // Set Reference to image of this cell.

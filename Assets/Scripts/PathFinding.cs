@@ -45,7 +45,6 @@ public class PathFinding
         pathStartCell.heuristicCost = CalcualteHCost(pathStartCell, pathEndCell);
         pathStartCell.CalculateFCost();
 
-
         MinHeap fCostHeap = new MinHeap(grid); //With min-heaps when a cell from openList with min fCost is required, We can just pop from it and there will be no need to search
 
         fCostHeap.Add(pathStartCell.index); // add first cell 
@@ -74,9 +73,8 @@ public class PathFinding
 
             foreach (Cell neighborCell in GetAllNeighbors(currentCell))
             {
-                if (closedList.Contains(neighborCell) || neighborCell.isBlock) // Go to nex cell
+                if (closedList.Contains(neighborCell) || neighborCell.isBlock) // Go to next cell
                     continue;
-
  
                 int tempGCost = CalcualteHCost(currentCell, neighborCell) + currentCell.gCost; // gCost of current node = distance between currentnode and it's parent + distance from root to parent.
                 if (tempGCost < neighborCell.gCost) // check if algorithm reach a node with lesser gCost.

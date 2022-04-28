@@ -43,9 +43,9 @@ public class MoveGrid : MonoBehaviour //inherited from MonoBehaviour. This will 
             for (int j = 0; j < 25; j++)
             {
                 Vector2 pos = Vector2.zero;
-                pos.x = (firstPos.x + 0.25f )- i * tileDistance.x * 2f; // 0.25 is distance from most down-left point of camera.
+                pos.x = (firstPos.x + 0.25f ) - i * tileDistance.x * 2f; // 0.25 is distance from most down-left point of camera.
                                                                             // 2 is Multiplier that make distance between tiles bigger. 
-                pos.y = (firstPos.y + 0.25f )- j * tileDistance.y * 2f;
+                pos.y = (firstPos.y + 0.25f ) - j * tileDistance.y * 2f;
 
                 grid[i, j] = Instantiate(cellPref, this.transform);
                 grid[i, j].Init(gridData.GetCellBool(j * 25 + i), j, i, pos,gridData);
@@ -53,7 +53,7 @@ public class MoveGrid : MonoBehaviour //inherited from MonoBehaviour. This will 
         }
     }
 
-    private Vector2 CalculateTileDistance()
+    private Vector2 CalculateTileDistance() //WRONG
     {
         Vector2 firstPos = Camera.main.ScreenToWorldPoint(new Vector2(0, 0));
         Vector2 temp = Vector2.zero; //Vector2 is used for not indicating a direction or position but just for holding two numbers.
